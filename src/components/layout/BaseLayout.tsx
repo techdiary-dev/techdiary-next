@@ -1,15 +1,12 @@
-import Link from "next/link";
-import React, { Children, PropsWithChildren } from "react";
-import DarkLogo from "../logos/DarkLogo";
+import React, { PropsWithChildren } from "react";
 import Navbar from "../navbar/Navbar";
 
 const BaseLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div>
-      {" "}
+    <>
       <Navbar />
-      <div>{ children}</div>
-    </div>
+      <main>{children}</main>
+    </>
   );
 };
 

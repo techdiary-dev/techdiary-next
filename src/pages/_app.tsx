@@ -10,11 +10,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  );
+  return <Component {...pageProps} />;
+
+  //  return (
+  //    <SessionProvider session={session}>
+  //      <Component {...pageProps} />
+  //    </SessionProvider>
+  //  );
 };
 
 export default api.withTRPC(MyApp);

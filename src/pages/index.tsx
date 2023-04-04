@@ -7,8 +7,6 @@ import { api } from "@/utils/api";
 import BaseLayout from "@/components/layout/BaseLayout";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -17,7 +15,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <BaseLayout>
-          <p>TechDiary</p>
+        <p>TechDiary</p>
       </BaseLayout>
     </>
   );
@@ -30,7 +28,7 @@ const AuthShowcase: React.FC = () => {
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
-    { enabled: sessionData?.user !== undefined },
+    { enabled: sessionData?.user !== undefined }
   );
 
   return (
