@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import React, { HtmlHTMLAttributes } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsMoon } from "react-icons/bs";
@@ -13,39 +14,12 @@ const NavbarAction = () => {
           <IconMoon />
         </button>
       </div>
-      <NewDiaryButton />
+      <Button>New Post</Button>
     </div>
   );
 };
 
 export default NavbarAction;
-
-// ------------------- New Diary Button -------------------
-interface NewDiaryButtonProps {
-  onPlusClick?: () => void;
-}
-const NewDiaryButton: React.FC<NewDiaryButtonProps> = ({ onPlusClick }) => (
-  <button
-    onClick={onPlusClick}
-    className="items-center hidden px-4 py-1 space-x-2 rounded-full bg-primary lg:flex"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      className="w-4 h-4 text-white"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M12 4v16m8-8H4"
-      ></path>
-    </svg>{" "}
-    <span className="text-white">নতুন ডায়েরি</span>
-  </button>
-);
 
 // ------------------- Icons -------------------
 const IconHome = () => (
