@@ -6,11 +6,7 @@
   html {
     @apply scroll-smooth;
   }
-  body {
-    @apply font-KohinoorBangla;
-    @apply text-dark;
-    @apply bg-white dark:bg-slate-900;
-  }
+
   a {
     @apply text-primary-400;
   }
@@ -29,6 +25,12 @@
   ::-webkit-scrollbar-thumb {
     @apply rounded-lg bg-gray-600;
   }
+}
+
+body {
+  @apply font-KohinoorBangla;
+  @apply text-dark;
+  @apply bg-white dark:bg-slate-900;
 }
 
 @layer utilities {

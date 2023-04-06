@@ -1,9 +1,5 @@
-import { Title } from "@mantine/core";
 import Image from "next/image";
 import React from "react";
-import { AiOutlineHome } from "react-icons/ai";
-import { HiOutlineBookmark, HiPlus } from "react-icons/hi";
-import TagsWidget from "./widgets/TagsWidget";
 
 const tags = [
   {
@@ -100,27 +96,23 @@ const tags = [
   },
 ];
 
-const HomeLeftSidebar = () => {
+const TagsWidget = () => {
   return (
-    <div className="flex flex-col gap-3 ">
-      <div className="mb-2 mt-4 flex flex-col gap-4">
-        <p className="flex items-center gap-2">
-          <AiOutlineHome color="#1e293b" />
-          <span className="text-sm text-[#1e293b]">হোম</span>
-        </p>
-        <p className="flex items-center gap-2">
-          <HiOutlineBookmark color="#1e293b" />
-          <span className="text-sm text-[#1e293b]">রিডিং লিস্ট</span>
-        </p>
-        <p className="flex items-center gap-2">
-          <HiPlus color="#1e293b" />
-          <span className="text-sm text-[#1e293b]">নতুন ডায়েরি</span>
-        </p>
-      </div>
+    <div>
+      <h3 className="mb-2 text-sm font-semibold text-gray-600 dark:text-slate-300">
+        নির্বাচিত ট্যাগ সমূহ
+      </h3>
 
-      <TagsWidget />
+      <div className="flex flex-col gap-2">
+        {tags.map((tag, index) => (
+          <div className="flex items-center gap-2" key={index}>
+            <Image src={tag.icon} width={20} height={10} alt={tag?.label} />
+            <p className="text-slate-600">{tag?.label}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default HomeLeftSidebar;
+export default TagsWidget;

@@ -12,8 +12,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <MantineProvider
       emotionCache={techdiaryEmotionCache}
-      withGlobalStyles
-      withNormalizeCSS
       theme={{
         colorScheme: "light",
         colors: {
