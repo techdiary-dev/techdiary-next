@@ -1,6 +1,6 @@
 import { Title } from "@mantine/core";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { HiOutlineBookmark, HiPlus } from "react-icons/hi";
 
@@ -100,6 +100,7 @@ const tags = [
 ];
 
 const HomeLeftSidebar = () => {
+  const [tagsCount, setTagCount] = useState(10)
   return (
     <div className="flex flex-col gap-3 ">
       <div className="mt-4 mb-2 flex flex-col gap-4">
