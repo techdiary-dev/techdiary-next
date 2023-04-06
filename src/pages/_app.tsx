@@ -7,11 +7,7 @@ import { MantineProvider, createEmotionCache } from "@mantine/core";
 import { api } from "@/utils/api";
 
 import "@/styles/app.scss";
-
-const myCache = createEmotionCache({
-  key: "techdiary-ui",
-  prepend: false,
-});
+import { techdiaryEmotionCache } from "@/utils/emotion-cache";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -19,12 +15,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <MantineProvider
-      emotionCache={myCache}
+      emotionCache={techdiaryEmotionCache}
       withGlobalStyles
       withNormalizeCSS
-      theme={{
-        colorScheme: "light",
-      }}
+      theme={{ colorScheme: "light" }}
     >
       <Component {...pageProps} />
     </MantineProvider>
