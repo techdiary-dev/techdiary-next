@@ -1,6 +1,7 @@
 import { Title } from "@mantine/core";
 import Image from "next/image";
 import React from "react";
+import { AiOutlineHome } from "react-icons/ai";
 
 const tags = [
   {
@@ -100,8 +101,11 @@ const tags = [
 const HomeLeftSidebar = () => {
   return (
     <div className="flex flex-col gap-3 ">
-      <div>
-        
+      <div className="my-4">
+        <p className="flex ">
+          <AiOutlineHome />
+          <span>হোম</span>
+        </p>
       </div>
       <h3 className="text-sm font-semibold text-gray-600 dark:text-slate-300">
         নির্বাচিত ট্যাগ সমূহ
