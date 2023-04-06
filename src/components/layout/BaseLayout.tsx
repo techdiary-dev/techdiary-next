@@ -15,10 +15,10 @@ const BaseLayout: React.FC<PropsWithChildren<Props>> = ({
   return (
     <>
       <Navbar />
-      <Container size={"xl"}>
+      <Container size={"lg"}>
         <Grid>
-          {LeftSidebar && <Grid.Col span={3}>{LeftSidebar}</Grid.Col>}
-          <Grid.Col md={6} span={12} className="bg-red-500">
+          {LeftSidebar && <Grid.Col span={2}>{LeftSidebar}</Grid.Col>}
+          <Grid.Col md={7} span={12} className="bg-red-500">
             {children}
           </Grid.Col>
           {RightSidebar && (

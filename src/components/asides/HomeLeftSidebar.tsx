@@ -1,3 +1,5 @@
+import { Title } from "@mantine/core";
+import Image from "next/image";
 import React from "react";
 
 const tags = [
@@ -96,7 +98,29 @@ const tags = [
 ];
 
 const HomeLeftSidebar = () => {
-  return <div className=" bg-primary-500">HomeLeftSidebar</div>;
+  return (
+    <div className="flex flex-col gap-3 ">
+      <div>
+        
+      </div>
+      <h3 className="text-sm font-semibold text-gray-600 dark:text-slate-300">
+        নির্বাচিত ট্যাগ সমূহ
+      </h3>
+
+      {tags.map((tag) => (
+        <div className="flex  items-center gap-2">
+          <Image
+            src={tag.icon}
+            width={20}
+            height={10}
+            alt="tag-icon"
+            key={tag.icon}
+          />
+          <p className="text-slate-600">{tag.label}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default HomeLeftSidebar;
