@@ -4,6 +4,20 @@ import { MantineProvider, createEmotionCache } from "@mantine/core";
 
 import "@/styles/app.scss";
 import { techdiaryEmotionCache } from "@/utils/emotion-cache";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/utils/query-client";
+const brandColorShades: (string | undefined)[] = [
+  "#F5F6FF",
+  "#E6E9FF",
+  "#CCD4FF",
+  "#AEBAFE",
+  "#8A9CFE",
+  "#768BFE",
+  "#627AFE",
+  "#4964FD",
+  "#2646FD",
+  "#0221D4",
+];
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -15,23 +29,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
       theme={{
         colorScheme: "light",
         colors: {
-          primary: [
-            "#F5F6FF",
-            "#E6E9FF",
-            "#CCD4FF",
-            "#AEBAFE",
-            "#8A9CFE",
-            "#768BFE",
-            "#627AFE",
-            "#4964FD",
-            "#2646FD",
-            "#0221D4",
-          ],
+          // @ts-ignore
+          primary: brandColorShades,
         },
         primaryColor: "primary",
       }}
     >
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </MantineProvider>
   );
 
