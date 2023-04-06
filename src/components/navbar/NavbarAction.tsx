@@ -1,7 +1,5 @@
 import { Button } from "@mantine/core";
-import React, { HtmlHTMLAttributes } from "react";
-import { AiOutlineHome } from "react-icons/ai";
-import { BsMoon } from "react-icons/bs";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const NavbarAction = () => {
   return (
@@ -14,7 +12,7 @@ const NavbarAction = () => {
           <IconMoon />
         </button>
       </div>
-      <Button>New Post</Button>
+      <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button>
     </div>
   );
 };

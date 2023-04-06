@@ -12,11 +12,11 @@
     @apply bg-white dark:bg-slate-900;
   }
   a {
-    @apply text-primary;
+    @apply text-primary-400;
   }
 
   *::selection {
-    @apply bg-primary text-gray-800;
+    @apply bg-primary-400 text-gray-800;
   }
   ::-webkit-scrollbar {
     width: 3px;
