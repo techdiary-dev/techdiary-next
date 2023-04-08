@@ -37,10 +37,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
         primaryColor: "primary",
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-        <ReactQueryDevtools />
-      </QueryClientProvider>
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </SessionProvider>
     </MantineProvider>
   );
 

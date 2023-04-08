@@ -1,23 +1,77 @@
-import { Button } from "@mantine/core";
-import { AiOutlinePlus } from "react-icons/ai";
+import { Avatar, Button, Loader, Menu, UnstyledButton } from "@mantine/core";
+import { signOut, useSession } from "next-auth/react";
+import { AiFillGithub, AiOutlineGoogle } from "react-icons/ai";
 
 const NavbarAction = () => {
+  const { status } = useSession();
   return (
-    <div className="flex gap-2 md:gap-6">
-      <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2 md:gap-6">
+      {/* <div className="flex items-center gap-1">
         <button>
           <IconHome />
         </button>
         <button>
           <IconMoon />
         </button>
-      </div>
-      <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button>
+      </div> */}
+      {/* <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button> */}
+      {status === "loading" && <Loader />}
+      {status === "authenticated" && <AuthenticatedMenu />}
+      {status === "unauthenticated" && <UnAuthenticatedMenu />}
     </div>
   );
 };
 
 export default NavbarAction;
+
+const AuthenticatedMenu = () => {
+  const { data } = useSession();
+
+  const handleLogout = () => {
+    signOut();
+  };
+
+  return (
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <UnstyledButton>
+          <Avatar src={data?.user.image} alt={data?.user?.name || ""} />
+        </UnstyledButton>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item>আমার প্রোফাইল</Menu.Item>
+        <Menu.Item>ড্যাসবোর্ড</Menu.Item>
+        <Menu.Item>বুকমার্ক সমূহ</Menu.Item>
+        <Menu.Item>সেটিং</Menu.Item>
+        <Menu.Item component="button" onClick={handleLogout}>
+          লগ আউট
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+};
+
+const UnAuthenticatedMenu = () => {
+  return (
+    <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <UnstyledButton>
+          <Avatar />
+        </UnstyledButton>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item icon={<AiFillGithub size={18} />}>
+          গিটহাব দিয়ে লগইন
+        </Menu.Item>
+        <Menu.Item icon={<AiOutlineGoogle size={18} />}>
+          গুগল দিয়ে লগইন
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+};
 
 // ------------------- Icons -------------------
 const IconHome = () => (
