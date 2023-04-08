@@ -74,14 +74,14 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
           </button>
         </div>
       </div>
-      <a
+      <Link
         href={`${article?.user?.username}/${article?.slug}`}
         className="article-card__title"
       >
         {article?.title}
-      </a>
+      </Link>
       <div className="article-card__thumbnail">
-        <a href={`${article?.user?.username}/${article?.slug}`}>
+        <Link href={`${article?.user?.username}/${article?.slug}`}>
           <div className="inline-block w-full overflow-hidden rounded-md">
             <img
               width={1200}
@@ -91,7 +91,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
               className="w-full"
             />
           </div>
-        </a>
+        </Link>
       </div>
       <div className="article-card__content">
         <a
