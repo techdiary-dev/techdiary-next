@@ -1,23 +1,47 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-
+import { VisibilityObserver } from "reactjs-visibility";
 import { IArticle } from "@/api/models/article.model";
+import { IPaginationBase } from "@/api/models/pagination.model";
 import { ArticleRepository } from "@/api/repositories/article.repository";
+import ArticleCard from "@/components/ArticleCard";
 import FakeEditor from "@/components/FakeEditor";
 import HomeLeftSidebar from "@/components/asides/HomeLeftSidebar";
 import HomeRightSidebar from "@/components/asides/HomeRightSidebar";
 import ThreeColumnLayout from "@/components/layout/ThreeColumnLayout";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 interface Props {
-  articles: IArticle[];
+  paginatedArticles: IPaginationBase<IArticle>;
 }
 
-const Home: NextPage<Props> = () => {
+const Home: NextPage<Props> = ({ paginatedArticles }) => {
   const articleRepository = new ArticleRepository();
 
-  const { data, isLoading } = useQuery(["articles"], () =>
-    articleRepository.getArticles()
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ["articles"],
+      queryFn: async ({ pageParam = 1 }) => {
+        return articleRepository.getArticles({ page: pageParam });
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.meta.current_page !== lastPage.meta.last_page) {
+          return lastPage.meta.current_page + 1;
+        }
+      },
+      getPreviousPageParam: (firstPage) => {
+        if (firstPage.meta.current_page !== 1) {
+          return firstPage.meta.current_page - 1;
+        }
+      },
+      initialData: { pages: [paginatedArticles], pageParams: [1] },
+    });
+
+  const articles = data?.pages.reduce(
+    (acc: IArticle[], page: IPaginationBase<IArticle>) => {
+      return [...acc, ...page.data];
+    },
+    []
   );
 
   return (
@@ -32,9 +56,24 @@ const Home: NextPage<Props> = () => {
         RightSidebar={<HomeRightSidebar />}
       >
         <FakeEditor />
+        <div className="flex flex-col gap-10 mt-10">
+          {articles?.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
 
-        {isLoading && <div>Loading...</div>}
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <div className="my-20">
+          <VisibilityObserver
+            onChangeVisibility={(isVisible) => {
+              if (isVisible) {
+                fetchNextPage();
+              }
+            }}
+            options={{ rootMargin: "200px" }}
+          >
+            <p>Loadmore...</p>
+          </VisibilityObserver>
+        </div>
       </ThreeColumnLayout>
     </>
   );
@@ -46,7 +85,7 @@ export const getServerSideProps = async () => {
   const articleRepository = new ArticleRepository();
   return {
     props: {
-      articles: await articleRepository.getArticles(),
+      paginatedArticles: await articleRepository.getArticles({ page: 1 }),
     },
   };
 };

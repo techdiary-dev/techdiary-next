@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 const tags = [
   {
@@ -97,6 +97,8 @@ const tags = [
 ];
 
 const TagsWidget = () => {
+  const [count, setCount] = useState(10);
+
   return (
     <div>
       <h3 className="mb-2 text-sm font-semibold text-gray-600 dark:text-slate-300">
@@ -104,13 +106,19 @@ const TagsWidget = () => {
       </h3>
 
       <div className="flex flex-col gap-2">
-        {tags.map((tag, index) => (
+        {tags.slice(0, count).map((tag, index) => (
           <div className="flex items-center gap-2" key={index}>
             <Image src={tag.icon} width={20} height={10} alt={tag?.label} />
             <p className="text-slate-600">{tag?.label}</p>
           </div>
         ))}
       </div>
+
+      {count === 10 && (
+        <button className="mt-2 text-sm" onClick={() => setCount(tags.length)}>
+          সকল ট্যাগ...
+        </button>
+      )}
     </div>
   );
 };

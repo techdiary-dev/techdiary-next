@@ -6,10 +6,10 @@ import { HiOutlineBookmark, HiPlus } from "react-icons/hi";
 import TagsWidget from "./widgets/TagsWidget";
 
 const HomeLeftSidebar = () => {
-  const [tagsCount, setTagCount] = useState(10)
+  const [tagsCount, setTagCount] = useState(10);
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-4 mt-4 mb-2">
+      <div className="mb-2 mt-4 flex flex-col gap-4">
         <p className="flex items-center gap-2">
           <AiOutlineHome color="#1e293b" />
           <span className="text-sm text-[#1e293b]">হোম</span>

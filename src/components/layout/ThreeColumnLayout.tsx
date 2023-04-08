@@ -24,7 +24,7 @@ const ThreeColumnLayout: React.FC<PropsWithChildren<Props>> = ({
           <div className="layout__main app-border-color">{children}</div>
 
           {RightSidebar && (
-            <div className="overflow-y-auto layout__aside layout__aside--right">
+            <div className="layout__aside layout__aside--right overflow-y-auto">
               <div className="layout__aside__inner">{RightSidebar}</div>
             </div>
           )}
