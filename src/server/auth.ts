@@ -1,14 +1,13 @@
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
-  type NextAuthOptions,
   type DefaultSession,
+  type NextAuthOptions,
 } from "next-auth";
 // import DiscordProvider from "next-auth/providers/discord";
+import { httpClient } from "@/api/http.client";
+import { IUserFullDetails } from "@/api/models/user.model";
 import GithubProvider from "next-auth/providers/github";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { env } from "@/env.mjs";
-import { prisma } from "@/server/db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,15 +19,10 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      accessToken: string;
+      details?: IUserFullDetails;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -37,21 +31,58 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  session: { strategy: "jwt" },
   callbacks: {
-    // session({ session, user }) {
-    //   if (session.user) {
-    //     session.user.id = user.id;
-    //     // session.user.role = user.role; <-- put other properties on the session here
-    //   }
-    //   return session;
-    // },
+    async session({ session, user, token }) {
+      session.user.accessToken = token.accessToken as string;
+      if (session?.user?.accessToken) {
+        try {
+          const res = await httpClient.get("/profile/me", {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          });
+          session.user.details = res.data;
+        } catch (error) {
+          // @ts-ignore
+          session = null;
+          return session;
+        }
+      }
+      return session;
+    },
+    signIn({ user }) {
+      console.log("h=signIn", user);
+      return true;
+    },
+    async jwt({ token }) {
+      try {
+        if (token.accessToken === undefined) {
+          const { data } = await httpClient.post("/tokens/token-by-secret", {
+            oauth_uid: token.sub,
+            oauth_provider: "github",
+            email: token?.email,
+            name: token?.name,
+            image: token?.image,
+            secret: "secret",
+          });
+          return Promise.resolve({
+            ...token,
+            accessToken: data.access_token,
+          });
+        } else {
+          return Promise.resolve({
+            ...token,
+          });
+        }
+      } catch (error) {
+        console.log("h=jwt", error);
+        return token;
+      }
+    },
   },
   // adapter: PrismaAdapter(prisma),
   providers: [
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
     GithubProvider({
       clientId: "e89074d2a3a02a68a6a7",
       clientSecret: "c25e1008b0b0581a80df4d9f34398277602d4015",
@@ -66,6 +97,19 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  events: {
+    signOut({ token }) {
+      httpClient
+        .delete("/tokens/current", {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+          },
+        })
+        .finally(() => {
+          console.log("Token revoked");
+        });
+    },
+  },
 };
 
 /**

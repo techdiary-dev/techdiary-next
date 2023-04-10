@@ -10,6 +10,7 @@ import HomeLeftSidebar from "@/components/asides/HomeLeftSidebar";
 import HomeRightSidebar from "@/components/asides/HomeRightSidebar";
 import ThreeColumnLayout from "@/components/layout/ThreeColumnLayout";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 interface Props {
   paginatedArticles: IPaginationBase<IArticle>;
@@ -17,7 +18,6 @@ interface Props {
 
 const Home: NextPage<Props> = ({ paginatedArticles }) => {
   const articleRepository = new ArticleRepository();
-
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
       queryKey: ["articles"],
@@ -36,7 +36,6 @@ const Home: NextPage<Props> = ({ paginatedArticles }) => {
       },
       initialData: { pages: [paginatedArticles], pageParams: [1] },
     });
-
   const articles = data?.pages.reduce(
     (acc: IArticle[], page: IPaginationBase<IArticle>) => {
       return [...acc, ...page.data];
@@ -61,7 +60,6 @@ const Home: NextPage<Props> = ({ paginatedArticles }) => {
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
-
         <div className="my-20">
           <VisibilityObserver
             onChangeVisibility={(isVisible) => {

@@ -1,9 +1,19 @@
-import { Avatar, Button, Loader, Menu, UnstyledButton } from "@mantine/core";
-import { signOut, useSession } from "next-auth/react";
-import { AiFillGithub, AiOutlineGoogle } from "react-icons/ai";
+import { sessionUserAtom } from "@/store/user.stom";
+import { Avatar, Menu, UnstyledButton } from "@mantine/core";
+import { useAtom } from "jotai";
+import { signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { AiFillGithub } from "react-icons/ai";
+import {
+  HiLogout,
+  HiOutlineBookmark,
+  HiOutlineCog,
+  HiOutlineUserCircle,
+} from "react-icons/hi";
+import { MdOutlineDashboard } from "react-icons/md";
 
 const NavbarAction = () => {
-  const { status } = useSession();
+  const [sessionUser] = useAtom(sessionUserAtom);
   return (
     <div className="flex items-center gap-2 md:gap-6">
       {/* <div className="flex items-center gap-1">
@@ -15,9 +25,9 @@ const NavbarAction = () => {
         </button>
       </div> */}
       {/* <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button> */}
-      {status === "loading" && <Loader />}
-      {status === "authenticated" && <AuthenticatedMenu />}
-      {status === "unauthenticated" && <UnAuthenticatedMenu />}
+      {/* {status === "loading" && <Loader />} */}
+      {sessionUser && <AuthenticatedMenu />}
+      {!sessionUser && <UnAuthenticatedMenu />}
     </div>
   );
 };
@@ -25,7 +35,7 @@ const NavbarAction = () => {
 export default NavbarAction;
 
 const AuthenticatedMenu = () => {
-  const { data } = useSession();
+  const [sessionUser] = useAtom(sessionUserAtom);
 
   const handleLogout = () => {
     signOut();
@@ -35,16 +45,33 @@ const AuthenticatedMenu = () => {
     <Menu shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton>
-          <Avatar src={data?.user.image} alt={data?.user?.name || ""} />
+          <Avatar
+            src={sessionUser?.profilePhoto || ""}
+            alt={sessionUser?.name || ""}
+          />
         </UnstyledButton>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item>আমার প্রোফাইল</Menu.Item>
-        <Menu.Item>ড্যাসবোর্ড</Menu.Item>
-        <Menu.Item>বুকমার্ক সমূহ</Menu.Item>
-        <Menu.Item>সেটিং</Menu.Item>
-        <Menu.Item component="button" onClick={handleLogout}>
+        <Menu.Item
+          component={Link}
+          href={`@${sessionUser?.username}`}
+          icon={<HiOutlineUserCircle size={18} />}
+        >
+          আমার প্রোফাইল
+        </Menu.Item>
+        <Menu.Item icon={<MdOutlineDashboard size={18} />}>
+          ড্যাসবোর্ড
+        </Menu.Item>
+        <Menu.Item icon={<HiOutlineBookmark size={18} />}>
+          বুকমার্ক সমূহ
+        </Menu.Item>
+        <Menu.Item icon={<HiOutlineCog size={18} />}>সেটিং</Menu.Item>
+        <Menu.Item
+          icon={<HiLogout size={18} />}
+          component="button"
+          onClick={handleLogout}
+        >
           লগ আউট
         </Menu.Item>
       </Menu.Dropdown>
@@ -53,6 +80,10 @@ const AuthenticatedMenu = () => {
 };
 
 const UnAuthenticatedMenu = () => {
+  const handleLogin = (provider: string) => {
+    signIn(provider);
+  };
+
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
@@ -62,12 +93,20 @@ const UnAuthenticatedMenu = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item icon={<AiFillGithub size={18} />}>
+        <Menu.Item
+          component="button"
+          onClick={() => handleLogin("github")}
+          icon={<AiFillGithub size={18} />}
+        >
           গিটহাব দিয়ে লগইন
         </Menu.Item>
-        <Menu.Item icon={<AiOutlineGoogle size={18} />}>
+        {/* <Menu.Item
+          component="button"
+          onClick={() => handleLogin("google")}
+          icon={<AiOutlineGoogle size={18} />}
+        >
           গুগল দিয়ে লগইন
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu.Dropdown>
     </Menu>
   );
