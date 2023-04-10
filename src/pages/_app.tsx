@@ -10,7 +10,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/utils/query-client";
 import { SessionProvider, getSession } from "next-auth/react";
 import { useEffect } from "react";
-import { sessionUserAtom } from "@/store/user.stom";
+import { sesionUserStatusAtom, sessionUserAtom } from "@/store/user.stom";
 const brandColorShades: (string | undefined)[] = [
   "#F5F6FF",
   "#E6E9FF",
@@ -29,10 +29,17 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const [, setSessionUser] = useAtom(sessionUserAtom);
+  const [, sessionUserStatus] = useAtom(sesionUserStatusAtom);
   useEffect(() => {
-    getSession().then((session) => {
-      setSessionUser(session?.user.details!);
-    });
+    sessionUserStatus("loading");
+    getSession()
+      .then((session) => {
+        setSessionUser(session?.user.details!);
+        sessionUserStatus("authenticated");
+      })
+      .catch(() => {
+        sessionUserStatus("unauthenticated");
+      });
   }, []);
 
   return (

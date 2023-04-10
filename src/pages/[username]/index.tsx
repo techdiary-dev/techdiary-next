@@ -1,13 +1,14 @@
 import BaseLayout from "@/components/layout/BaseLayout";
+import useUser from "@/hooks/useUser";
+import { sesionUserStatusAtom, sessionUserAtom } from "@/store/user.stom";
+import { useAtom } from "jotai";
 import { GetServerSideProps, NextPage } from "next";
-import { useSession } from "next-auth/react";
-import React from "react";
 
 const UserProfilePage: NextPage = (props) => {
-  const session = useSession();
+  const { user, status } = useUser();
   return (
     <BaseLayout>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <pre>{JSON.stringify({ status, user }, null, 2)}</pre>
     </BaseLayout>
   );
 };
