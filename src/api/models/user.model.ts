@@ -7,6 +7,7 @@ export interface IUser {
     twitter: string;
     github: string;
   };
+  joined?: Date;
 }
 
 export interface IUserFullDetails {
