@@ -8,6 +8,7 @@ import {
 import { httpClient } from "@/api/http.client";
 import { IUserFullDetails } from "@/api/models/user.model";
 import GithubProvider from "next-auth/providers/github";
+import { env } from "@/env.mjs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -84,8 +85,8 @@ export const authOptions: NextAuthOptions = {
   // adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: "e89074d2a3a02a68a6a7",
-      clientSecret: "c25e1008b0b0581a80df4d9f34398277602d4015",
+      clientId: env.GITHUB_APP_ID,
+      clientSecret: env.GITHUB_APP_SECRET,
     }),
     /**
      * ...add more providers here.
