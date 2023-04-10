@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
             oauth_provider: "github",
             email: token?.email,
             name: token?.name,
-            image: token?.image,
+            image: token.picture,
             secret: "secret",
           });
           return Promise.resolve({
