@@ -5,6 +5,9 @@ import { bn } from "date-fns/locale";
 
 import Link from "next/link";
 import React from "react";
+import { relativeTime } from "@/utils/relativeTime";
+import { HoverCard } from "@mantine/core";
+import UserHoverCard from "./UserHoverCard";
 
 interface Props {
   article: IArticle;
@@ -15,29 +18,42 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
     <article>
       <div className="mb-[10px] flex h-12 items-center justify-between">
         {/*  */}
-        <Link href={article?.user?.username}>
+
+        <HoverCard width={280} shadow="md">
           <div className="flex items-center space-x-2">
             <div className="inline-block w-10 h-10 overflow-hidden rounded-full">
-              <img
-                height={40}
-                width={40}
-                src={article?.user?.profilePhoto}
-                alt={article?.user?.username}
-                className="w-full"
-              />
+              <HoverCard.Target>
+                <Link href={`@${article?.user?.username}`}>
+                  <img
+                    height={40}
+                    width={40}
+                    src={article?.user?.profilePhoto}
+                    alt={article?.user?.username}
+                    className="w-full"
+                  />
+                </Link>
+              </HoverCard.Target>
             </div>
+
+            <HoverCard.Dropdown>
+              <UserHoverCard user={article?.user} />
+            </HoverCard.Dropdown>
+
             <div>
-              <p className="font-mono text-dark-secondary">
-                {article?.user?.username}
-              </p>
-              <p className="text-sm text-dark-secondary">
-                {format(new Date(article?.created_at), "dd MMMM yyyy", {
-                  locale: bn,
-                })}
+              <HoverCard.Target>
+                <Link
+                  href={`@${article?.user?.username}`}
+                  className="font-mono text-base text-dark-secondary"
+                >
+                  {article?.user?.username}
+                </Link>
+              </HoverCard.Target>
+              <p className="text-xs text-dark-secondary">
+                {relativeTime(new Date(article?.created_at))}
               </p>
             </div>
           </div>
-        </Link>
+        </HoverCard>
         {/*  */}
 
         <div className="space-x-3">
@@ -75,13 +91,13 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
         </div>
       </div>
       <Link
-        href={`${article?.user?.username}/${article?.slug}`}
+        href={`@${article?.user?.username}/${article?.slug}`}
         className="article-card__title"
       >
         {article?.title}
       </Link>
       <div className="article-card__thumbnail">
-        <Link href={`${article?.user?.username}/${article?.slug}`}>
+        <Link href={`@${article?.user?.username}/${article?.slug}`}>
           <div className="inline-block w-full overflow-hidden rounded-md">
             <img
               width={1200}
