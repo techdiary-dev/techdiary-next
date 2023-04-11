@@ -35,8 +35,8 @@ const User = ({ user }: { user: IUser }) => {
       <Link href={`/@${user.username}`}>
         <div className="h-10 w-10 overflow-hidden rounded-full">
           <img
-            src={user.profilePhoto!}
-            alt={user.name!}
+            src={user?.profilePhoto!}
+            alt={user?.name!}
             loading="lazy"
             className="h-auto w-full"
           />
@@ -46,7 +46,7 @@ const User = ({ user }: { user: IUser }) => {
       <div className="ml-2">
         <h3 className="text-dark text-base">
           <Link
-            href={`/@${user.username}`}
+            href={`/@${user?.username}`}
             className="text-gray-800 dark:text-gray-300"
           >
             {user.name}

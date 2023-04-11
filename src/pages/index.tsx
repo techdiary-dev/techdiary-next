@@ -43,6 +43,8 @@ const Home: NextPage<Props> = ({ paginatedArticles }) => {
     []
   );
 
+  // return <h1>Hello</h1>;
+
   return (
     <>
       <Head>

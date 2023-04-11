@@ -4,6 +4,7 @@ import { MantineProvider } from "@mantine/core";
 import { Provider as JotaiProvider, useAtom } from "jotai";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Notifications } from "@mantine/notifications";
 import "@/styles/app.scss";
 import { techdiaryEmotionCache } from "@/utils/emotion-cache";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -46,7 +47,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <MantineProvider
       emotionCache={techdiaryEmotionCache}
       theme={{
-        colorScheme: "light",
+        // colorScheme: "dark",
+        primaryShade: 4,
         colors: {
           // @ts-ignore
           primary: brandColorShades,
@@ -58,6 +60,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
           <ReactQueryDevtools />
+          <Notifications />
         </QueryClientProvider>
       </SessionProvider>
     </MantineProvider>

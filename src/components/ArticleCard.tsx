@@ -1,12 +1,19 @@
 import { IArticle } from "@/api/models/article.model";
-import Image from "next/image";
-import { format } from "date-fns";
-import { bn } from "date-fns/locale";
+import { useClipboard, useSetState } from "@mantine/hooks";
 
+import { notifications } from "@mantine/notifications";
+import useShare from "@/hooks/useShare";
+import useUser from "@/hooks/useUser";
+import { relativeTime } from "@/utils/relativeTime";
+import { HoverCard, Menu } from "@mantine/core";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import React from "react";
-import { relativeTime } from "@/utils/relativeTime";
-import { HoverCard } from "@mantine/core";
+import { AiFillFacebook } from "react-icons/ai";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { FiCopy } from "react-icons/fi";
+import { RiTwitterFill } from "react-icons/ri";
+import { bookmarkRepository } from "../api/repositories/bookmark.repository";
 import UserHoverCard from "./UserHoverCard";
 
 interface Props {
@@ -14,11 +21,63 @@ interface Props {
 }
 
 const ArticleCard: React.FC<Props> = ({ article }) => {
+  const { user: sessionUser } = useUser();
+  const clipboard = useClipboard({ timeout: 100 });
+
+  const [state, setState] = useSetState({
+    bookmarked_users: article?.bookmarked_users,
+    votes: {
+      down_voters: article?.votes?.down_voters,
+      up_voters: article?.votes?.up_voters,
+      score: article?.votes?.score,
+    },
+  });
+
+  const toogleBookmarkState = (bookmarked?: boolean) => {
+    if (state.bookmarked_users?.includes(sessionUser?.id!)) {
+      setState({
+        bookmarked_users: state.bookmarked_users?.filter(
+          (id) => id !== sessionUser?.id!
+        ),
+      });
+    } else {
+      setState({
+        bookmarked_users: [...state.bookmarked_users, sessionUser?.id!],
+      });
+    }
+  };
+
+  const { mutate: mutate__createBookmark } = useMutation(
+    (id: string) => {
+      toogleBookmarkState();
+      return bookmarkRepository.createBook({
+        model_name: "ARTICLE",
+        model_id: id,
+      });
+    },
+    {
+      onSuccess: (res) => {
+        if (res?.data?.bookmarked) {
+          setState({
+            bookmarked_users: [...state.bookmarked_users, sessionUser?.id!],
+          });
+        } else {
+          setState({
+            bookmarked_users: state.bookmarked_users?.filter(
+              (id) => id !== sessionUser?.id!
+            ),
+          });
+        }
+      },
+    }
+  );
+
+  const { share } = useShare(article.url);
+
   return (
     <article>
       <div className="mb-[10px] flex h-12 items-center justify-between">
         {/*  */}
-
         <HoverCard width={280} shadow="md">
           <div className="flex items-center space-x-2">
             <div className="inline-block w-10 h-10 overflow-hidden rounded-full">
@@ -57,37 +116,65 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
         {/*  */}
 
         <div className="space-x-3">
-          <button>
-            <svg
-              viewBox="0 0 14 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 text-dark-secondary"
-            >
-              <path
-                d="M1.83354 1.28697C1.52462 1.63079 1.35107 2.0971 1.35107 2.58333V17.25L7.11647 14.0417L12.8819 17.25V2.58333C12.8819 2.0971 12.7083 1.63079 12.3994 1.28697C12.0905 0.943154 11.6715 0.75 11.2346 0.75H2.99833C2.56145 0.75 2.14246 0.943154 1.83354 1.28697Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="stroke-current"
-              ></path>
-            </svg>
+          {/* Bookmark button */}
+          <button onClick={() => mutate__createBookmark(article.id)}>
+            {state.bookmarked_users?.includes(sessionUser?.id!) ? (
+              <FaBookmark />
+            ) : (
+              <FaRegBookmark />
+            )}
           </button>
-          <button className="relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-              ></path>
-            </svg>
-          </button>
+
+          <Menu shadow="md" width={200}>
+            <Menu.Target>
+              <button className="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-5 text-gray-700"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                  ></path>
+                </svg>
+              </button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item
+                icon={<AiFillFacebook size={22} className="text-gray-700" />}
+                component="button"
+                onClick={() => share("facebook")}
+              >
+                ফেসবুকে শেয়ার করুন
+              </Menu.Item>
+              <Menu.Item
+                icon={<RiTwitterFill size={22} className="text-gray-700" />}
+                component="button"
+                onClick={() => share("twitter")}
+              >
+                টুইটার শেয়ার করুন
+              </Menu.Item>
+              <Menu.Item
+                icon={<FiCopy size={22} className="text-gray-700" />}
+                component="button"
+                onClick={() => {
+                  clipboard.copy(article.url);
+                  notifications.show({
+                    message: "লিংক কপি করা হয়েছে",
+                    icon: <FiCopy size={18} />,
+                  });
+                }}
+              >
+                লিংক কপি করুন
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </div>
       </div>
       <Link
@@ -109,11 +196,14 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
           </div>
         </Link>
       </div>
+
       <div className="article-card__content">
         <a
-          href="/guestac2004iebp/5cf5eaf5-d339-4401-bfb9-716c26fae99f-OSoccW"
+          href={`@${article?.user?.username}/${article?.slug}`}
           className="article-card__excerpt"
-        ></a>
+        >
+          {article?.excerpt}
+        </a>
         <div className="article-card__tags"></div>
         <div className="flex items-center mt-2 space-x-4">
           <div className="vote">
@@ -132,7 +222,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                   d="M5 15l7-7 7 7"
                 ></path>
               </svg>
-              <span>4</span>
+              <span>{state?.votes?.score}</span>
             </button>
             <button className="vote__button vote__button--downvote">
               <svg
@@ -166,7 +256,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                 d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
               ></path>
             </svg>
-            <span>0</span>
+            <span>{article?.comments_count}</span>
           </p>
         </div>
       </div>

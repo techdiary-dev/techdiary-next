@@ -6,7 +6,7 @@ export interface IArticle {
   title: string;
   slug: string;
   url: string;
-  votes: IVote[];
+  votes: IVote;
   bookmarked_users: string[];
   comments_count: number;
   thumbnail: string;

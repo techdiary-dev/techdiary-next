@@ -1,9 +1,10 @@
+import useUser from "@/hooks/useUser";
 import { sessionUserAtom } from "@/store/user.stom";
-import { Avatar, Menu, UnstyledButton } from "@mantine/core";
+import { Avatar, Button, Loader, Menu, UnstyledButton } from "@mantine/core";
 import { useAtom } from "jotai";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
-import { AiFillGithub } from "react-icons/ai";
+import { AiFillGithub, AiOutlinePlus } from "react-icons/ai";
 import {
   HiLogout,
   HiOutlineBookmark,
@@ -13,7 +14,7 @@ import {
 import { MdOutlineDashboard } from "react-icons/md";
 
 const NavbarAction = () => {
-  const [sessionUser] = useAtom(sessionUserAtom);
+  const { status } = useUser();
   return (
     <div className="flex items-center gap-2 md:gap-6">
       {/* <div className="flex items-center gap-1">
@@ -24,10 +25,14 @@ const NavbarAction = () => {
           <IconMoon />
         </button>
       </div> */}
-      {/* <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button> */}
-      {/* {status === "loading" && <Loader />} */}
-      {sessionUser && <AuthenticatedMenu />}
-      {!sessionUser && <UnAuthenticatedMenu />}
+      {status === "loading" && <Loader />}
+      {status === "authenticated" && (
+        <>
+          <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button>
+          <AuthenticatedMenu />
+        </>
+      )}
+      {status === "unauthenticated" && <UnAuthenticatedMenu />}
     </div>
   );
 };
