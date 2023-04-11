@@ -15,6 +15,8 @@ import { FiCopy } from "react-icons/fi";
 import { RiTwitterFill } from "react-icons/ri";
 import { bookmarkRepository } from "../api/repositories/bookmark.repository";
 import UserHoverCard from "./UserHoverCard";
+import useVote from "@/hooks/useVote";
+import classNames from "classnames";
 
 interface Props {
   article: IArticle;
@@ -26,11 +28,6 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
 
   const [state, setState] = useSetState({
     bookmarked_users: article?.bookmarked_users,
-    votes: {
-      down_voters: article?.votes?.down_voters,
-      up_voters: article?.votes?.up_voters,
-      score: article?.votes?.score,
-    },
   });
 
   const toogleBookmarkState = (bookmarked?: boolean) => {
@@ -73,6 +70,11 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
   );
 
   const { share } = useShare(article.url);
+  const { makeVote, voteState } = useVote({
+    modelName: "ARTICLE",
+    id: article.id,
+    data: article.votes,
+  });
 
   return (
     <article>
@@ -207,7 +209,14 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
         <div className="article-card__tags"></div>
         <div className="flex items-center mt-2 space-x-4">
           <div className="vote">
-            <button className="vote__button vote__button--upvote">
+            <button
+              className={classNames("vote__button vote__button--upvote", {
+                "vote__button--active": voteState.up_voters?.includes(
+                  sessionUser?.id!
+                ),
+              })}
+              onClick={() => makeVote("UP_VOTE")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -222,9 +231,16 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                   d="M5 15l7-7 7 7"
                 ></path>
               </svg>
-              <span>{state?.votes?.score}</span>
+              <span>{voteState.score}</span>
             </button>
-            <button className="vote__button vote__button--downvote">
+            <button
+              className={classNames("vote__button vote__button--downvote", {
+                "vote__button--active": voteState.down_voters?.includes(
+                  sessionUser?.id!
+                ),
+              })}
+              onClick={() => makeVote("DOWN_VOTE")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
