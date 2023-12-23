@@ -1,0 +1,16 @@
+.profile-navigation {
+  @apply mb-2 flex space-x-4 border-b dark:border-slate-700;
+
+  &__item {
+    @apply text-slate-600 dark:text-slate-100;
+    @apply flex items-center space-x-1 border-b-2 border-transparent p-3 pb-2;
+
+    &--active,
+    &:hover {
+      @apply app-border-color;
+    }
+  }
+  &__label {
+    @apply text-sm;
+  }
+}
