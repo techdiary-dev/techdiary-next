@@ -1,6 +1,6 @@
 import { httpClient } from "../http.client";
 import { IPaginationBase } from "../models/pagination.model";
-import { IUser } from "../models/user.model";
+import { IUser, IUserFullDetails } from "../models/user.model";
 import { BasePaginationPayload } from "../payloads/base-pagination.payload";
 import { ApiRepository } from "./repository";
 
@@ -18,5 +18,16 @@ export class UserRepository extends ApiRepository {
         page: payload.page,
       },
     });
+  }
+
+  /**
+   * Get a user by username
+   * @param userName - username of the user to get
+   * @returns
+   */
+  userProfileByUserName(userName: string) {
+    return httpClient.get<{ data: IUserFullDetails }>(
+      "/profile/username/" + userName,
+    );
   }
 }
