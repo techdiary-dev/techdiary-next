@@ -85,7 +85,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
           <div className="flex items-center space-x-2">
             <div className="inline-block h-10 w-10 overflow-hidden rounded-full">
               <HoverCard.Target>
-                <Link href={`@${article?.user?.username}`}>
+                <Link href={`/@${article?.user?.username}`}>
                   <img
                     height={40}
                     width={40}
