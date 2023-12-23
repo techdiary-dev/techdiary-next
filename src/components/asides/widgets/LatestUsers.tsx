@@ -3,12 +3,16 @@
 import { IUser } from "@/api/models/user.model";
 import { UserRepository } from "@/api/repositories/user.repository";
 import { relativeTime } from "@/utils/relativeTime";
-import { Skeleton } from "@mantine/core";
+import { Button, Skeleton } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
 const LatestUsers = () => {
   const userRepository = new UserRepository();
-  const { isLoading, data } = userRepository.users(10);
+  const { data, isLoading } = useQuery({
+    queryKey: ["latestUsers"],
+    queryFn: () => userRepository.users({ limit: 10, page: 1 }),
+  });
 
   return (
     <div>
@@ -18,10 +22,7 @@ const LatestUsers = () => {
       <div className="flex flex-col gap-5">
         {isLoading &&
           Array.from({ length: 10 }).map((_, i) => <UserSkeleton key={i} />)}
-
-        {data?.data.map((user) => (
-          <User user={user} key={user.id} />
-        ))}
+        {data?.data.data.map((user) => <User user={user} key={user.id} />)}
       </div>
     </div>
   );
@@ -33,18 +34,18 @@ const User = ({ user }: { user: IUser }) => {
   return (
     <div className="flex items-center">
       <Link href={`/@${user.username}`}>
-        <div className="w-10 h-10 overflow-hidden rounded-full">
+        <div className="h-10 w-10 overflow-hidden rounded-full">
           <img
             src={user?.profilePhoto!}
             alt={user?.name!}
             loading="lazy"
-            className="w-full h-auto"
+            className="h-auto w-full"
           />
         </div>
       </Link>
 
       <div className="ml-2">
-        <h3 className="text-base text-dark">
+        <h3 className="text-dark text-base">
           <Link
             href={`/@${user?.username}`}
             className="text-gray-800 dark:text-gray-300"
@@ -52,7 +53,7 @@ const User = ({ user }: { user: IUser }) => {
             {user.name}
           </Link>
         </h3>
-        <p className="text-xs text-dark-secondary">
+        <p className="text-dark-secondary text-xs">
           {relativeTime(new Date(user.joined!))}
         </p>
       </div>
@@ -64,7 +65,7 @@ const UserSkeleton = () => {
   return (
     <div className="flex items-center gap-2">
       <Skeleton height={40} width={40} circle className="flex-none " />
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex w-full flex-col gap-2">
         <Skeleton height={10} radius="xl" width={"70%"} />
         <Skeleton height={6} radius="xl" width={"70%"} />
       </div>

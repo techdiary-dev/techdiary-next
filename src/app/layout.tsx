@@ -1,12 +1,10 @@
-import { queryClient } from "@/utils/query-client";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import "@/styles/app.scss";
+import "@mantine/core/styles.css";
+import { ColorSchemeScript } from "@mantine/core";
 
-import { QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import AppProvider from "@/providers/AppProvider";
 import BaseLayout from "@/components/layout/BaseLayout";
+import AppProvider from "@/providers/AppProvider";
+import { PropsWithChildren } from "react";
 
 export const metadata = {
   title: "Techdiary - A place to share your knowledge",
@@ -19,10 +17,9 @@ const layout: React.FC<PropsWithChildren> = ({ children }) => {
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
+        <meta charSet="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
         <AppProvider>

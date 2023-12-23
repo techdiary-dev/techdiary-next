@@ -47,33 +47,31 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
     }
   };
 
-  const { mutate: mutate__createBookmark } = useMutation(
-    (id: string) => {
+  const { mutate: mutate__createBookmark } = useMutation({
+    mutationFn: (id: string) => {
       toogleBookmarkState();
       return bookmarkRepository.createBook({
         model_name: "ARTICLE",
         model_id: id,
       });
     },
-    {
-      onSuccess: (res) => {
-        if (res?.data?.bookmarked) {
-          setState({
-            bookmarked_users: [...state.bookmarked_users, sessionUser?.id!],
-          });
-        } else {
-          setState({
-            bookmarked_users: state.bookmarked_users?.filter(
-              (id) => id !== sessionUser?.id!
-            ),
-          });
-        }
-      },
-    }
-  );
+    onSuccess: (res) => {
+      if (res?.data?.bookmarked) {
+        setState({
+          bookmarked_users: [...state.bookmarked_users, sessionUser?.id!],
+        });
+      } else {
+        setState({
+          bookmarked_users: state.bookmarked_users?.filter(
+            (id) => id !== sessionUser?.id!
+          ),
+        });
+      }
+    },
+  });
 
   const { share } = useShare(article.url);
-  const { makeVote, voteState } = useVote({
+  const { voteState } = useVote({
     modelName: "ARTICLE",
     id: article.id,
     data: article.votes,
@@ -222,7 +220,6 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                   sessionUser?.id!
                 ),
               })}
-              onClick={() => makeVote("UP_VOTE")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +243,6 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                   sessionUser?.id!
                 ),
               })}
-              onClick={() => makeVote("DOWN_VOTE")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
