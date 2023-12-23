@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -109,7 +111,7 @@ const TagsWidget = () => {
         {tags.slice(0, count).map((tag, index) => (
           <div className="flex items-center gap-2" key={index}>
             <Image src={tag.icon} width={20} height={10} alt={tag?.label} />
-            <p className="text-slate-600">{tag?.label}</p>
+            <p className="text-dark-secondary">{tag?.label}</p>
           </div>
         ))}
       </div>

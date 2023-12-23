@@ -12,25 +12,23 @@ const ThreeColumnLayout: React.FC<PropsWithChildren<Props>> = ({
   RightSidebar,
 }) => {
   return (
-    <BaseLayout>
-      <Container size={"xl"}>
-        <div className="layout">
-          {LeftSidebar && (
-            <aside className="layout__aside layout__aside--left">
-              <div className="layout__aside__inner">{LeftSidebar}</div>
-            </aside>
-          )}
+    <Container size={"xl"}>
+      <div className="layout">
+        {LeftSidebar && (
+          <aside className="layout__aside layout__aside--left">
+            <div className="layout__aside__inner">{LeftSidebar}</div>
+          </aside>
+        )}
 
-          <div className="layout__main app-border-color">{children}</div>
+        <div className="layout__main app-border-color">{children}</div>
 
-          {RightSidebar && (
-            <div className="layout__aside layout__aside--right overflow-y-auto">
-              <div className="layout__aside__inner">{RightSidebar}</div>
-            </div>
-          )}
-        </div>
-      </Container>
-    </BaseLayout>
+        {RightSidebar && (
+          <div className="overflow-y-auto layout__aside layout__aside--right">
+            <div className="layout__aside__inner">{RightSidebar}</div>
+          </div>
+        )}
+      </div>
+    </Container>
   );
 };
 

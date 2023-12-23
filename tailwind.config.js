@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
-  darkMode: "class", // or 'media' or 'class'
+  darkMode: ["class", '[data-mantine-color-scheme="dark"]'], // or 'media' or 'class'
   theme: {
     extend: {
       colors: {

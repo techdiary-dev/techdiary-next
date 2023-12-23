@@ -43,15 +43,8 @@ const Home: NextPage<Props> = ({ paginatedArticles }) => {
     []
   );
 
-  // return <h1>Hello</h1>;
-
   return (
     <>
-      <Head>
-        <title>Techdiary</title>
-        <meta name="description" content="Techdiary" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <ThreeColumnLayout
         LeftSidebar={<HomeLeftSidebar />}
         RightSidebar={<HomeRightSidebar />}
@@ -81,14 +74,14 @@ const Home: NextPage<Props> = ({ paginatedArticles }) => {
 
 export default Home;
 
-export const getServerSideProps = async () => {
-  const articleRepository = new ArticleRepository();
-  return {
-    props: {
-      paginatedArticles: await articleRepository.getArticles({ page: 1 }),
-    },
-  };
-};
+// export const getServerSideProps = async () => {
+//   const articleRepository = new ArticleRepository();
+//   return {
+//     props: {
+//       paginatedArticles: await articleRepository.getArticles({ page: 1 }),
+//     },
+//   };
+// };
 
 // const AuthShowcase: React.FC = () => {
 //   const { data: sessionData } = useSession();

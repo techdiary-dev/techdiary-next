@@ -1,9 +1,11 @@
+"use client";
+
 import { IArticle } from "@/api/models/article.model";
 import { useClipboard, useSetState } from "@mantine/hooks";
 
 import { notifications } from "@mantine/notifications";
 import useShare from "@/hooks/useShare";
-import useUser from "@/hooks/useUser";
+
 import { relativeTime } from "@/utils/relativeTime";
 import { HoverCard, Menu } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
@@ -17,6 +19,7 @@ import { bookmarkRepository } from "../api/repositories/bookmark.repository";
 import UserHoverCard from "./UserHoverCard";
 import useVote from "@/hooks/useVote";
 import classNames from "classnames";
+import useUser from "@/hooks/useUser";
 
 interface Props {
   article: IArticle;
@@ -149,21 +152,25 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
 
             <Menu.Dropdown>
               <Menu.Item
-                icon={<AiFillFacebook size={22} className="text-gray-700" />}
+                leftSection={
+                  <AiFillFacebook size={22} className="text-gray-700" />
+                }
                 component="button"
                 onClick={() => share("facebook")}
               >
                 ফেসবুকে শেয়ার করুন
               </Menu.Item>
               <Menu.Item
-                icon={<RiTwitterFill size={22} className="text-gray-700" />}
+                leftSection={
+                  <RiTwitterFill size={22} className="text-gray-700" />
+                }
                 component="button"
                 onClick={() => share("twitter")}
               >
                 টুইটার শেয়ার করুন
               </Menu.Item>
               <Menu.Item
-                icon={<FiCopy size={22} className="text-gray-700" />}
+                leftSection={<FiCopy size={22} className="text-gray-700" />}
                 component="button"
                 onClick={() => {
                   clipboard.copy(article.url);

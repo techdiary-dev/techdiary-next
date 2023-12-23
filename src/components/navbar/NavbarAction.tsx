@@ -1,38 +1,57 @@
-import useUser from "@/hooks/useUser";
+"use client";
 import { sessionUserAtom } from "@/store/user.stom";
-import { Avatar, Button, Loader, Menu, UnstyledButton } from "@mantine/core";
+import {
+  Avatar,
+  Menu,
+  UnstyledButton,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useAtom } from "jotai";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
-import { AiFillGithub, AiOutlinePlus } from "react-icons/ai";
+import { AiFillGithub } from "react-icons/ai";
 import {
   HiLogout,
   HiOutlineBookmark,
   HiOutlineCog,
   HiOutlineUserCircle,
 } from "react-icons/hi";
-import { MdOutlineDashboard } from "react-icons/md";
+import {
+  MdDarkMode,
+  MdOutlineDashboard,
+  MdOutlineWbSunny,
+} from "react-icons/md";
 
 const NavbarAction = () => {
-  const { status } = useUser();
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
+  // const { status } = useUser();
   return (
     <div className="flex items-center gap-2 md:gap-6">
-      {/* <div className="flex items-center gap-1">
-        <button>
-          <IconHome />
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() =>
+            setColorScheme(computedColorScheme === "light" ? "dark" : "light")
+          }
+        >
+          {computedColorScheme === "light" ? (
+            <MdDarkMode size={22} />
+          ) : (
+            <MdOutlineWbSunny size={22} />
+          )}
         </button>
-        <button>
-          <IconMoon />
-        </button>
-      </div> */}
-      {status === "loading" && <Loader />}
-      {status === "authenticated" && (
+      </div>
+      {/* {status === "loading" && <Loader />} */}
+      {/* {status === "authenticated" && (
         <>
           <Button leftIcon={<AiOutlinePlus />}>নতুন ডায়েরি</Button>
           <AuthenticatedMenu />
         </>
-      )}
-      {status === "unauthenticated" && <UnAuthenticatedMenu />}
+      )} */}
+      {/* {status === "unauthenticated" && <UnAuthenticatedMenu />} */}
     </div>
   );
 };
@@ -61,19 +80,19 @@ const AuthenticatedMenu = () => {
         <Menu.Item
           component={Link}
           href={`@${sessionUser?.username}`}
-          icon={<HiOutlineUserCircle size={18} />}
+          leftSection={<HiOutlineUserCircle size={18} />}
         >
           আমার প্রোফাইল
         </Menu.Item>
-        <Menu.Item icon={<MdOutlineDashboard size={18} />}>
+        <Menu.Item leftSection={<MdOutlineDashboard size={18} />}>
           ড্যাসবোর্ড
         </Menu.Item>
-        <Menu.Item icon={<HiOutlineBookmark size={18} />}>
+        <Menu.Item leftSection={<HiOutlineBookmark size={18} />}>
           বুকমার্ক সমূহ
         </Menu.Item>
-        <Menu.Item icon={<HiOutlineCog size={18} />}>সেটিং</Menu.Item>
+        <Menu.Item leftSection={<HiOutlineCog size={18} />}>সেটিং</Menu.Item>
         <Menu.Item
-          icon={<HiLogout size={18} />}
+          leftSection={<HiLogout size={18} />}
           component="button"
           onClick={handleLogout}
         >
@@ -101,7 +120,7 @@ const UnAuthenticatedMenu = () => {
         <Menu.Item
           component="button"
           onClick={() => handleLogin("github")}
-          icon={<AiFillGithub size={18} />}
+          leftSection={<AiFillGithub size={18} />}
         >
           গিটহাব দিয়ে লগইন
         </Menu.Item>
