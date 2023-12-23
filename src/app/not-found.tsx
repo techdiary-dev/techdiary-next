@@ -7,9 +7,6 @@ import { TbArrowLeft } from "react-icons/tb";
 
 const NotFoundErrorPage: React.FC<PropsWithChildren> = async () => {
   const headersList = headers();
-  const domain = headersList.get("host");
-
-  // get url from headers
   const url = headersList.get("referer");
 
   return (
