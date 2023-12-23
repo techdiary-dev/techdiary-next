@@ -37,7 +37,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
     if (state.bookmarked_users?.includes(sessionUser?.id!)) {
       setState({
         bookmarked_users: state.bookmarked_users?.filter(
-          (id) => id !== sessionUser?.id!
+          (id) => id !== sessionUser?.id!,
         ),
       });
     } else {
@@ -63,7 +63,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
       } else {
         setState({
           bookmarked_users: state.bookmarked_users?.filter(
-            (id) => id !== sessionUser?.id!
+            (id) => id !== sessionUser?.id!,
           ),
         });
       }
@@ -83,7 +83,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
         {/*  */}
         <HoverCard width={280} shadow="md">
           <div className="flex items-center space-x-2">
-            <div className="inline-block w-10 h-10 overflow-hidden rounded-full">
+            <div className="inline-block h-10 w-10 overflow-hidden rounded-full">
               <HoverCard.Target>
                 <Link href={`@${article?.user?.username}`}>
                   <img
@@ -105,12 +105,12 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
               <HoverCard.Target>
                 <Link
                   href={`@${article?.user?.username}`}
-                  className="font-mono text-base text-dark-secondary"
+                  className="text-dark-secondary font-mono text-base"
                 >
                   {article?.user?.username}
                 </Link>
               </HoverCard.Target>
-              <p className="text-xs text-dark-secondary">
+              <p className="text-dark-secondary text-xs">
                 {relativeTime(new Date(article?.created_at))}
               </p>
             </div>
@@ -212,12 +212,12 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
           {article?.excerpt}
         </a>
         <div className="article-card__tags"></div>
-        <div className="flex items-center mt-2 space-x-4">
+        <div className="mt-2 flex items-center space-x-4">
           <div className="vote">
             <button
               className={classNames("vote__button vote__button--upvote", {
                 "vote__button--active": voteState.up_voters?.includes(
-                  sessionUser?.id!
+                  sessionUser?.id!,
                 ),
               })}
             >
@@ -226,7 +226,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="w-4 h-4"
+                className="h-4 w-4"
               >
                 <path
                   strokeLinecap="round"
@@ -240,7 +240,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
             <button
               className={classNames("vote__button vote__button--downvote", {
                 "vote__button--active": voteState.down_voters?.includes(
-                  sessionUser?.id!
+                  sessionUser?.id!,
                 ),
               })}
             >
@@ -249,7 +249,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="w-4 h-4"
+                className="h-4 w-4"
               >
                 <path
                   strokeLinecap="round"
@@ -266,7 +266,7 @@ const ArticleCard: React.FC<Props> = ({ article }) => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="w-5 h-5 text-gray-500"
+              className="h-5 w-5 text-gray-500"
             >
               <path
                 strokeLinecap="round"

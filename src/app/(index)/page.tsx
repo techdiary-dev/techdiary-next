@@ -21,8 +21,7 @@ const HomePage: NextPage = async () => {
       >
         <FakeEditor />
         <div className="mt-10 flex flex-col gap-10">
-          <ArticleFeed />
-          <pre>{JSON.stringify(articles, null, 2)}</pre>
+          <ArticleFeed initArticles={articles} />
         </div>
       </ThreeColumnLayout>
     </>
