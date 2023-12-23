@@ -7,7 +7,7 @@ interface Props {
 
 const ArticleFeed: React.FC<Props> = ({ initArticles }) => {
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {initArticles?.map((article) => (
         <ArticleCard article={article} key={article.id} />
       ))}
