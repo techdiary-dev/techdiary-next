@@ -1,9 +1,11 @@
 "use client";
 
+import { useVisibility } from "reactjs-visibility";
 import { IArticle } from "@/api/models/article.model";
 import { IPaginationBase } from "@/api/models/pagination.model";
 import { ArticleRepository } from "@/api/repositories/article.repository";
 import ArticleCard from "@/components/ArticleCard";
+import { Loader } from "@mantine/core";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
 interface Props {
@@ -35,6 +37,14 @@ const ArticleFeed: React.FC<Props> = ({ initPaginatedArticles }) => {
       initialData: { pages: [initPaginatedArticles], pageParams: [1] },
     });
 
+  const { ref } = useVisibility({
+    onChangeVisibility: (visible) => {
+      if (visible && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+  });
+
   return (
     <div className="flex flex-col gap-6">
       {data?.pages.map((page, i) => (
@@ -44,6 +54,8 @@ const ArticleFeed: React.FC<Props> = ({ initPaginatedArticles }) => {
           ))}
         </React.Fragment>
       ))}
+
+      <Loader ref={ref} className="mx-auto my-10" />
     </div>
   );
 };
