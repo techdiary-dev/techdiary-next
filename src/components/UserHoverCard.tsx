@@ -1,4 +1,4 @@
-import { IUser } from "@/api/models/user.model";
+import { IUser } from "@/http/models/user.model";
 import { Image, Paper, Title } from "@mantine/core";
 import Link from "next/link";
 import React from "react";

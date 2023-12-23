@@ -4,7 +4,7 @@ import HomeRightSidebar from "@/components/asides/HomeRightSidebar";
 import ThreeColumnLayout from "@/components/layout/ThreeColumnLayout";
 import { NextPage } from "next";
 import ArticleFeed from "./ArticleFeed";
-import { ArticleRepository } from "@/api/repositories/article.repository";
+import { ArticleRepository } from "@/http/repositories/article.repository";
 
 const HomePage: NextPage = async () => {
   const articleRepository = new ArticleRepository();

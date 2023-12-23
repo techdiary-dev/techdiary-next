@@ -1,4 +1,4 @@
-import { UserRepository } from "@/api/repositories/user.repository";
+import { UserRepository } from "@/http/repositories/user.repository";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import React from "react";
 

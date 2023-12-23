@@ -1,9 +1,9 @@
 "use client";
 
 import { useVisibility } from "reactjs-visibility";
-import { IArticle } from "@/api/models/article.model";
-import { IPaginationBase } from "@/api/models/pagination.model";
-import { ArticleRepository } from "@/api/repositories/article.repository";
+import { IArticle } from "@/http/models/article.model";
+import { IPaginationBase } from "@/http/models/pagination.model";
+import { ArticleRepository } from "@/http/repositories/article.repository";
 import ArticleCard from "@/components/ArticleCard";
 import { Loader } from "@mantine/core";
 import { useInfiniteQuery } from "@tanstack/react-query";

@@ -1,7 +1,7 @@
 "use client";
 
-import { IUser } from "@/api/models/user.model";
-import { UserRepository } from "@/api/repositories/user.repository";
+import { IUser } from "@/http/models/user.model";
+import { UserRepository } from "@/http/repositories/user.repository";
 import { relativeTime } from "@/utils/relativeTime";
 import { Button, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";

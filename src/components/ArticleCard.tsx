@@ -1,6 +1,6 @@
 "use client";
 
-import { IArticle } from "@/api/models/article.model";
+import { IArticle } from "@/http/models/article.model";
 import { useClipboard, useSetState } from "@mantine/hooks";
 
 import { notifications } from "@mantine/notifications";
@@ -15,7 +15,7 @@ import { AiFillFacebook } from "react-icons/ai";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import { RiTwitterFill } from "react-icons/ri";
-import { bookmarkRepository } from "../api/repositories/bookmark.repository";
+import { bookmarkRepository } from "../http/repositories/bookmark.repository";
 import UserHoverCard from "./UserHoverCard";
 import useVote from "@/hooks/useVote";
 import classNames from "classnames";

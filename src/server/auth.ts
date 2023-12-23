@@ -5,8 +5,8 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 // import DiscordProvider from "next-auth/providers/discord";
-import { httpClient } from "@/api/http.client";
-import { IUserFullDetails } from "@/api/models/user.model";
+import { httpClient } from "@/http/http.client";
+import { IUserFullDetails } from "@/http/models/user.model";
 import GithubProvider from "next-auth/providers/github";
 import { env } from "@/env.mjs";
 
