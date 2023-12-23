@@ -8,7 +8,7 @@ import { ArticleRepository } from "@/api/repositories/article.repository";
 
 const HomePage: NextPage = async () => {
   const articleRepository = new ArticleRepository();
-  const { data: articles } = await articleRepository.getArticles({
+  const paginatedArticles = await articleRepository.getArticles({
     limit: 10,
     page: 1,
   });
@@ -21,7 +21,7 @@ const HomePage: NextPage = async () => {
       >
         <FakeEditor />
         <div className="mt-10 flex flex-col gap-10">
-          <ArticleFeed initArticles={articles} />
+          <ArticleFeed initPaginatedArticles={paginatedArticles} />
         </div>
       </ThreeColumnLayout>
     </>

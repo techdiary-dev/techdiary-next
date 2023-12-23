@@ -10,7 +10,7 @@ export class ArticleRepository extends ApiRepository {
       "/articles",
       {
         params: { page: payload?.page, limit: payload?.limit },
-      }
+      },
     );
     return data;
   }
